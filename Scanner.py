@@ -25,23 +25,23 @@ class Scanner:
       case "(": 
         self.add_token(TokenType.LEFT_PAREN)
       case ")": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.RIGHT_PAREN)
       case "{": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.LEFT_BRACE)
       case "}": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.RIGHT_BRACE)
       case ",": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.COMMA)
       case ".": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.DOT)
       case "-": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.MINUS)
       case "+": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.PLUS)
       case "*": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.STAR)
       case ";": 
-        self.add_token(TokenType.LEFT_PAREN)
+        self.add_token(TokenType.SEMI_COLON)
 
       case _:
         main.error(self.line, "error: unexpected character.")
