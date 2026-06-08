@@ -1,5 +1,4 @@
 
-
 class Token: 
     def __init__(self, type, lexeme, literal, line):
         self.type = type

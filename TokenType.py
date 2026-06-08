@@ -1,6 +1,5 @@
 from enum import Enum, auto
 
-
 class TokenType(Enum):
     # single-character tokens
     LEFT_PAREN  = auto()
