@@ -1,6 +1,7 @@
 import token
 import token_type
-import main
+import kite
+import static_keywords
 
 class Scanner:
   def __init__(self, source):
@@ -68,8 +69,18 @@ class Scanner:
       case "\n":
         self.line += 1
 
+      # quote
+      case '"':
+        self.string()
+
       case _:
-        main.error(self.line, "error: unexpected character.")
+        if self.is_digit(c):
+          self.number()
+        elif self.is_alpha(c):
+          self.identifier()
+    
+        else:
+          kite.error(self.line, "unexpected character.")
     
 
   def is_at_end(self):
@@ -97,5 +108,57 @@ class Scanner:
     if self.is_at_end():
       return "\0"
     return self.source[self.current]
+  
+  def string(self):
+    while self.peek() != '"' and not self.is_at_end():
+      if self.peek() == "\n":
+        self.line += 1
 
+      self.advance()
+
+    if self.is_at_end():
+      kite.error(self.line, "unterminated string")
+      return
+
+    self.advance()
+    string_value = self.source[(self.start + 1):(self.current - 1)]
+    self.add_token(token_type.STRING, string_value)
+
+  def is_digit(self, c):
+    return c >= "0" and c <= "9"
+  
+  def number(self):
+    while self.is_digit(self.peek()):
+      self.advance()
+    
+    if self.peek() == "." and self.is_digit(self.peekNext()):
+      self.advance()
+
+      while self.is_digit(self.peek()):
+        self.advance()
+    
+    self.add_token(token_type.NUMBER, float(self.source[self.start:self.current]))
+
+  def peekNext(self):
+    if (self.current + 1) >= len(self.source):
+      return "\0"
+    return self.source[self.current + 1]
+  
+  def is_alpha(self, c):
+    return (c >= "a" and c <= "z") or (c >= "A" and c <= "Z") or (c == "_") 
+  
+  def is_alpha_numeric(self, c):
+    return self.is_alpha(c) or self.is_digit(c)
+  
+  def identifier(self):
+    while self.is_alpha_numeric(self.peek()):
+      self.advance()
+    
+    text = self.source[self.start:self.current]
+    type = static_keywords.keywords.get(text)
+
+    if type == None:
+      type = token_type.IDENTIFIER
+
+    self.add_token(type)
     
