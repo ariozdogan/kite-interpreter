@@ -3,6 +3,9 @@ from token_type import TokenType
 from expressions import Binary, Unary, Literal, Grouping
 
 class Parser:
+    class ParseError(Exception):
+        pass
+
     def __init__(self, tokens):
         self.tokens = tokens # stores list of tokens
         self.current = 0 # points to the next token that will be parsed
@@ -77,6 +80,8 @@ class Parser:
             self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression")
 
             return Grouping(expression)
+        
+        raise self.error(self.peek(), "Expect expression.")
     
     def match(self, *args): # checks if current token is a given type
         for type in args:
@@ -86,6 +91,13 @@ class Parser:
             
         return False
     
+    def consume(self, type, message): # checks to see if next token is expected type
+        if self.check(type):
+            self.advance()
+
+        else:
+            self.error(self.peek(), message)
+
     def check(self, type): # checks current token's type without consuming
         if self.is_at_end():
             return False
@@ -106,4 +118,34 @@ class Parser:
     
     def previous(self): # the token that was just consumed
         return self.tokens[self.current - 1]
+    
+    def error(self, token, message):
+        kite.error(token, message)
+        return parse_error()
+    
+    def synchronize(self):
+        self.advance()
+
+        while not self.is_at_end():
+            if self.previous() == TokenType.SEMICOLON:
+                return
+            
+            match self.peek():
+                case TokenType.CLASS:
+                    return
+                case TokenType.FUNCTION:
+                    return
+                case TokenType.VAR:
+                    return
+                case TokenType.FOR:
+                    return
+                case TokenType.IF:
+                    return
+                case TokenType.WHILE:
+                    return
+                case TokenType.PRINT:
+                    return
+                case TokenType.RETURN:
+                    return
+                
 

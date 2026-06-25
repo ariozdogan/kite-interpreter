@@ -1,6 +1,6 @@
 from expressions import Binary, Grouping, Literal, Unary
 from token_type import TokenType
-from token import Token
+from kite_token import Token
 
 class ExpressionPrinter:
     def print(self, expression):

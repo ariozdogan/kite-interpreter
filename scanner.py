@@ -1,6 +1,5 @@
-import token
+import kite_token
 import token_type
-import kite
 import static_keywords
 
 class Scanner:
@@ -17,7 +16,7 @@ class Scanner:
       self.start = self.current
       self.scan_token()
 
-    self.tokens.append(token(token_type.EOF, "", None, self.line))
+    self.tokens.append(kite_token(token_type.EOF, "", None, self.line))
     return self.tokens
 
   def scan_token(self):
